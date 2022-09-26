@@ -14,17 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-#ifndef _VOICE_INFO_H_
-#define _VOICE_INFO_H_
+#pragma once
 
 #define VOICE_INFO_MAX 100
 
-#include <stdint.h>
+#include <cstdint>
+#include <sndcore2/voice.h>
 
 typedef struct _VoiceInfo {
-    void *voice;         /**< Pointer to the voice */
-    uint32_t mixTV[24];  /**< Mix to the TV */
-    uint32_t mixDRC[24]; /**< Mix of the DRC */
+    AXVoice *voice;                  /**< Pointer to the voice */
+    AXVoiceDeviceMixData mixTV[24];  /**< Mix to the TV */
+    AXVoiceDeviceMixData mixDRC[24]; /**< Mix of the DRC */
 } VoiceInfo;
-
-#endif //_VOICE_INFO_H_

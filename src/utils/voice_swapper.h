@@ -14,21 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
-#ifndef _VOICE_SWAPPER_H_
-#define _VOICE_SWAPPER_H_
-#define VOICE_SWAP_LOG 0
-#include "common/c_retain_vars.h"
-#include "voice_info.h"
+#pragma once
 
-#include <stdio.h>
-#include <string.h>
+#include "retain_vars.hpp"
+#include "utils/voice_info.h"
+#include <cstdio>
+#include <cstring>
 
-void VoiceSwapper_acquireVoice(void *voice);
 
-void VoiceSwapper_freeVoice(void *voice);
+void VoiceSwapper_acquireVoice(AXVoice *voice);
 
-void VoiceSwapper_setMix(void *voice, uint32_t device, void *mix);
+void VoiceSwapper_freeVoice(AXVoice *voice);
+
+void VoiceSwapper_setMix(AXVoice *voice, AXDeviceType device, AXVoiceDeviceMixData *mix);
 
 void VoiceSwapper_swapAll();
-
-#endif //_VOICE_SWAPPER_H_

@@ -1,32 +1,31 @@
-# SwipSwapMe Plugin for the Wii U Plugin System [![Build Status](https://api.travis-ci.org/Maschell/SwipSwapMe.svg?branch=master)](https://travis-ci.org/Maschell/SwipSwapMe)
+# SwipSwapMe Plugin 
 
-This little app can be used to swap the TV and DRC screen.
+This little plugin can be used to swap the TV and DRC screen.
 
-# Wii U Plugin System
-This is a plugin for the [Wii U Plugin System (WUPS)](https://github.com/Maschell/WiiUPluginSystem/). To be able to use this plugin you have to place the resulting `.mod` file into the following folder:
+## Installation
+(`[ENVIRONMENT]` is a placeholder for the actual environment name.)
 
-```
-sd:/wiiu/plugins
-```
-When the file is placed on the SDCard you can load it with [plugin loader](https://github.com/Maschell/WiiUPluginSystem/).
+1. Copy the file `screenshot.wps` into `sd:/wiiu/environments/[ENVIRONMENT]/plugins`.  
+2. Requires the [WiiUPluginLoaderBackend](https://github.com/wiiu-env/WiiUPluginLoaderBackend) in `sd:/wiiu/environments/[ENVIRONMENT]/modules`.
 
-# Usage
+## Usage
+Press a button combo (default is the GamePad's TV button) on the GamePad, Pro Controller or Classic Controller to take swap the screens.
 
-When starting the app, you have the option to set your own button combo. Just press the button combo you want for 2 seconds.
-Otherwise it will use the default settings (TV button).
-
-Press the TV button (or your button combo) on the Gamepad to swap the screens. Thats all.
+Via the plugin config menu (press L, DPAD Down and Minus on the GamePad, Pro Controller or Classic Controller) you can configure the plugin. The available options are the following:
+- **Settings**: 
+  - Enabled: (Default is true)
+    - Enables or disables the SwipSwapMe plugin.
+  - Button combo: (Default is the GamePad's TV button)
+    - Changes the button combo for swapping the screens.
 
 ## Building
 
 For building you need: 
-- [wups](https://github.com/Maschell/WiiUPluginSystem)
-- [wut](https://github.com/decaf-emu/wut)
-- [libutilswut](https://github.com/Maschell/libutils/tree/wut) (WUT version) for common functions.
+- [wups](https://github.com/wiiu-env/WiiUPluginSystem)
+- [wut](https://github.com/devkitPro/wut
 
-Install them (in this order) according to their README's. Don't forget the dependencies of the libs itself.
+## Building using the Dockerfile
 
-### Building using the Dockerfile
 It's possible to use a docker image for building. This way you don't need anything installed on your host system.
 
 ```
