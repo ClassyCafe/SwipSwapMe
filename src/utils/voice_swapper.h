@@ -17,17 +17,17 @@
 #ifndef _VOICE_SWAPPER_H_
 #define _VOICE_SWAPPER_H_
 #define VOICE_SWAP_LOG 0
-#include "voice_info.h"
 #include "common/c_retain_vars.h"
+#include "voice_info.h"
 
 #include <stdio.h>
 #include <string.h>
 
-void VoiceSwapper_acquireVoice(void * voice);
+void VoiceSwapper_acquireVoice(void *voice);
 
-void VoiceSwapper_freeVoice(void * voice);
+void VoiceSwapper_freeVoice(void *voice);
 
-void VoiceSwapper_setMix(void * voice,uint32_t device, void* mix);
+void VoiceSwapper_setMix(void *voice, uint32_t device, void *mix);
 
 void VoiceSwapper_swapAll();
 

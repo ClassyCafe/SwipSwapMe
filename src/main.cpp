@@ -15,35 +15,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <malloc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <wups.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
-#include <vpad/input.h>
+#include <common/c_retain_vars.h>
 #include <coreinit/screen.h>
 #include <coreinit/thread.h>
-#include <common/c_retain_vars.h>
 #include <nsysnet/socket.h>
 #include <utils/logger.h>
+#include <vpad/input.h>
+
+#include "main.h"
 
 WUPS_PLUGIN_NAME("SwipSwapMe");
-WUPS_PLUGIN_DESCRIPTION("Swaps the gamepad and tv screen when pressing a certain button (TV is default)");
-WUPS_PLUGIN_VERSION("v1.0");
+WUPS_PLUGIN_DESCRIPTION("Swaps the GamePad and TV screen when pressing a certain button combination (TV button is default)");
+WUPS_PLUGIN_VERSION(VERSION_FULL);
 WUPS_PLUGIN_AUTHOR("Maschell");
 WUPS_PLUGIN_LICENSE("GPL");
 
 WUPS_FS_ACCESS()
 
-uint32_t SplashScreen(int32_t time,int32_t combotime);
+uint32_t SplashScreen(int32_t time, int32_t combotime);
 
 /* Entry point */
 ON_APPLICATION_START(args) {
-    memset(gVoiceInfos,0,sizeof(gVoiceInfos));
+    memset(gVoiceInfos, 0, sizeof(gVoiceInfos));
     socket_lib_init();
     log_init();
 }
@@ -53,12 +55,12 @@ ON_APP_STATUS_CHANGED(status) {
 }
 
 INITIALIZE_PLUGIN() {
-    uint32_t res = SplashScreen(10,2);
+    uint32_t res = SplashScreen(10, 2);
     gButtonCombo = res;
 }
 
 #define FPS 60
-uint32_t SplashScreen(int32_t time,int32_t combotime) {
+uint32_t SplashScreen(int32_t time, int32_t combotime) {
     uint32_t result = VPAD_BUTTON_TV;
 
     // Init screen
@@ -67,21 +69,21 @@ uint32_t SplashScreen(int32_t time,int32_t combotime) {
     uint32_t screen_buf0_size = OSScreenGetBufferSizeEx(SCREEN_TV);
     uint32_t screen_buf1_size = OSScreenGetBufferSizeEx(SCREEN_DRC);
 
-    uint32_t * screenbuffer0 = (uint32_t*)memalign(0x100, screen_buf0_size);
-    uint32_t * screenbuffer1 = (uint32_t*)memalign(0x100, screen_buf1_size);
+    uint32_t *screenbuffer0 = (uint32_t *) memalign(0x100, screen_buf0_size);
+    uint32_t *screenbuffer1 = (uint32_t *) memalign(0x100, screen_buf1_size);
 
-    if(screenbuffer0 == NULL || screenbuffer1 == NULL) {
-        if(screenbuffer0 != NULL) {
+    if (screenbuffer0 == NULL || screenbuffer1 == NULL) {
+        if (screenbuffer0 != NULL) {
             free(screenbuffer0);
         }
-        if(screenbuffer1 != NULL) {
+        if (screenbuffer1 != NULL) {
             free(screenbuffer1);
         }
         return result;
     }
 
-    OSScreenSetBufferEx(SCREEN_TV, (void *)screenbuffer0);
-    OSScreenSetBufferEx(SCREEN_DRC, (void *)screenbuffer1);
+    OSScreenSetBufferEx(SCREEN_TV, (void *) screenbuffer0);
+    OSScreenSetBufferEx(SCREEN_DRC, (void *) screenbuffer1);
 
     OSScreenEnableEx(SCREEN_TV, 1);
     OSScreenEnableEx(SCREEN_DRC, 1);
@@ -106,7 +108,7 @@ uint32_t SplashScreen(int32_t time,int32_t combotime) {
     strings.push_back("");
     strings.push_back("Otherwise the default combo (TV button) will be used in 10 seconds.");
     uint8_t pos = 0;
-    for (std::vector<std::string>::iterator it = strings.begin() ; it != strings.end(); ++it) {
+    for (std::vector<std::string>::iterator it = strings.begin(); it != strings.end(); ++it) {
         OSScreenPutFontEx(SCREEN_TV, 0, pos, (*it).c_str());
         OSScreenPutFontEx(SCREEN_DRC, 0, pos, (*it).c_str());
         pos++;
@@ -118,35 +120,35 @@ uint32_t SplashScreen(int32_t time,int32_t combotime) {
     int32_t tickswait = time * FPS * 16;
 
     int32_t sleepingtime = 16;
-    int32_t times = tickswait/16;
-    int32_t i=0;
+    int32_t times        = tickswait / 16;
+    int32_t i            = 0;
 
     VPADStatus vpad_data;
     VPADReadError error;
     uint32_t last = 0xFFFFFFFF;
     int32_t timer = 0;
-    while(i<times) {
+    while (i < times) {
         VPADRead(VPAD_CHAN_0, &vpad_data, 1, &error);
-        if(vpad_data.trigger == VPAD_BUTTON_TV)
+        if (vpad_data.trigger == VPAD_BUTTON_TV)
             break;
-        if(last == vpad_data.hold && last != 0) {
+        if (last == vpad_data.hold && last != 0) {
             timer++;
         } else {
-            last = vpad_data.hold;
+            last  = vpad_data.hold;
             timer = 0;
         }
-        if(timer >= combotime*FPS) {
+        if (timer >= combotime * FPS) {
             result = vpad_data.hold;
             break;
         }
         i++;
-        OSSleepTicks(OSMicrosecondsToTicks(sleepingtime*1000));
+        OSSleepTicks(OSMicrosecondsToTicks(sleepingtime * 1000));
     }
 
-    if(screenbuffer0 != NULL) {
+    if (screenbuffer0 != NULL) {
         free(screenbuffer0);
     }
-    if(screenbuffer1 != NULL) {
+    if (screenbuffer1 != NULL) {
         free(screenbuffer1);
     }
 

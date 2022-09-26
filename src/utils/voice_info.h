@@ -22,7 +22,7 @@
 #include <stdint.h>
 
 typedef struct _VoiceInfo {
-    void* voice;    /**< Pointer to the voice */
+    void *voice;         /**< Pointer to the voice */
     uint32_t mixTV[24];  /**< Mix to the TV */
     uint32_t mixDRC[24]; /**< Mix of the DRC */
 } VoiceInfo;

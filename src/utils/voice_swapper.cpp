@@ -15,51 +15,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ****************************************************************************/
 
-#include <utils/logger.h>
-#include "voice_info.h"
 #include "voice_swapper.h"
+#include "voice_info.h"
+#include <utils/logger.h>
 
-void VoiceSwapper_acquireVoice(void * voice){
-    for(int32_t i = 0;i<VOICE_INFO_MAX;i++){
-        if(gVoiceInfos[i].voice == NULL){
-            if(VOICE_SWAP_LOG == 1){log_printf("[VoiceSwapper] acquireVoice in slot %d for %08X!\n",i,voice);}
+void VoiceSwapper_acquireVoice(void *voice) {
+    for (int32_t i = 0; i < VOICE_INFO_MAX; i++) {
+        if (gVoiceInfos[i].voice == NULL) {
+            if (VOICE_SWAP_LOG == 1) { log_printf("[VoiceSwapper] acquireVoice in slot %d for %08X!\n", i, voice); }
             gVoiceInfos[i].voice = voice;
             break;
         }
     }
 }
 
-void VoiceSwapper_freeVoice(void * voice){
-    for(int32_t i = 0;i<VOICE_INFO_MAX;i++){
-        if(gVoiceInfos[i].voice == voice){
-            if(VOICE_SWAP_LOG == 1){log_printf("[VoiceSwapper] freeVoice in slot %d for %08X!\n",i,voice);}
+void VoiceSwapper_freeVoice(void *voice) {
+    for (int32_t i = 0; i < VOICE_INFO_MAX; i++) {
+        if (gVoiceInfos[i].voice == voice) {
+            if (VOICE_SWAP_LOG == 1) { log_printf("[VoiceSwapper] freeVoice in slot %d for %08X!\n", i, voice); }
             gVoiceInfos[i].voice = NULL;
             break;
         }
     }
 }
 
-void VoiceSwapper_setMix(void * voice,uint32_t device, void* mix){
-   for(int32_t i = 0;i<VOICE_INFO_MAX;i++){
-        if(gVoiceInfos[i].voice == voice){
-            if(VOICE_SWAP_LOG == 1){log_printf("[VoiceSwapper] setMix in slot %d for %08X!\n",i,voice);}
-            if(device == 0){
-                memcpy(gVoiceInfos[i].mixTV,mix,sizeof(gVoiceInfos[i].mixTV));
-            }else if(device == 1){
-                memcpy(gVoiceInfos[i].mixDRC,mix,sizeof(gVoiceInfos[i].mixDRC));
+void VoiceSwapper_setMix(void *voice, uint32_t device, void *mix) {
+    for (int32_t i = 0; i < VOICE_INFO_MAX; i++) {
+        if (gVoiceInfos[i].voice == voice) {
+            if (VOICE_SWAP_LOG == 1) { log_printf("[VoiceSwapper] setMix in slot %d for %08X!\n", i, voice); }
+            if (device == 0) {
+                memcpy(gVoiceInfos[i].mixTV, mix, sizeof(gVoiceInfos[i].mixTV));
+            } else if (device == 1) {
+                memcpy(gVoiceInfos[i].mixDRC, mix, sizeof(gVoiceInfos[i].mixDRC));
             }
             break;
         }
     }
 }
 
-void VoiceSwapper_swapAll(){
-    for(int32_t i = 0;i<VOICE_INFO_MAX;i++){
-        if(gVoiceInfos[i].voice == NULL) continue;
-        if(VOICE_SWAP_LOG == 1){log_printf("[VoiceSwapper] swapping slot %d, voice %08X!\n",i,gVoiceInfos[i].voice);}
+void VoiceSwapper_swapAll() {
+    for (int32_t i = 0; i < VOICE_INFO_MAX; i++) {
+        if (gVoiceInfos[i].voice == NULL) continue;
+        if (VOICE_SWAP_LOG == 1) { log_printf("[VoiceSwapper] swapping slot %d, voice %08X!\n", i, gVoiceInfos[i].voice); }
         uint32_t buffer[24];
-        memcpy(buffer,gVoiceInfos[i].mixTV,sizeof(gVoiceInfos[i].mixTV));
-        memcpy(gVoiceInfos[i].mixTV,gVoiceInfos[i].mixDRC,sizeof(gVoiceInfos[i].mixTV));
-        memcpy(gVoiceInfos[i].mixDRC,buffer,sizeof(gVoiceInfos[i].mixTV));
+        memcpy(buffer, gVoiceInfos[i].mixTV, sizeof(gVoiceInfos[i].mixTV));
+        memcpy(gVoiceInfos[i].mixTV, gVoiceInfos[i].mixDRC, sizeof(gVoiceInfos[i].mixTV));
+        memcpy(gVoiceInfos[i].mixDRC, buffer, sizeof(gVoiceInfos[i].mixTV));
     }
 }

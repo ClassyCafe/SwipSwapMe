@@ -16,9 +16,9 @@
  ****************************************************************************/
 #include "common/c_retain_vars.h"
 
-uint8_t gSwap __attribute__((section(".data"))) = 0;
+uint8_t gSwap __attribute__((section(".data")))             = 0;
 uint8_t gCallbackCooldown __attribute__((section(".data"))) = 0;
-uint8_t gAppStatus __attribute__((section(".data"))) = 0;
-uint32_t gButtonCombo __attribute__((section(".data"))) = 0;
+uint8_t gAppStatus __attribute__((section(".data")))        = 0;
+uint32_t gButtonCombo __attribute__((section(".data")))     = 0;
 
 VoiceInfo gVoiceInfos[VOICE_INFO_MAX] __attribute__((section(".data")));
