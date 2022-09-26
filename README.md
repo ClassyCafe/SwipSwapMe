@@ -1,6 +1,6 @@
 # SwipSwapMe Plugin 
 
-This little plugin can be used to swap the TV and DRC screen.
+This little plugin can be used to swap the TV and GamePad screen.
 
 ## Installation
 (`[ENVIRONMENT]` is a placeholder for the actual environment name.)

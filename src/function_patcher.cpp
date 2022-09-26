@@ -166,6 +166,9 @@ DECL_FUNCTION(void, WPADRead, WPADChan chan, WPADStatusProController *data) {
                 }
             }
         }
+        if (swapCoolDown > 0) {
+            swapCoolDown--;
+        }
     }
 }
 
