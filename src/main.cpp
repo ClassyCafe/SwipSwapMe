@@ -38,6 +38,7 @@ WUPS_USE_WUT_DEVOPTAB();
 WUPS_USE_STORAGE("SwipSwapMe");
 
 #define ENABLED_CONFIG_STRING      "enabled"
+#define TV_REMOTE_CONFIG_STRING    "tvRemoteDisabled"
 #define BUTTON_COMBO_CONFIG_STRING "buttonCombo"
 
 // Gets called once the loader exists.
@@ -56,6 +57,16 @@ INITIALIZE_PLUGIN() {
         if ((storageRes = WUPS_GetBool(nullptr, ENABLED_CONFIG_STRING, &gEnabled)) == WUPS_STORAGE_ERROR_NOT_FOUND) {
             // Add the value to the storage if it's missing.
             if (WUPS_StoreBool(nullptr, ENABLED_CONFIG_STRING, gEnabled) != WUPS_STORAGE_ERROR_SUCCESS) {
+                DEBUG_FUNCTION_LINE_ERR("Failed to store value");
+            }
+        } else if (storageRes != WUPS_STORAGE_ERROR_SUCCESS) {
+            DEBUG_FUNCTION_LINE_ERR("Failed to get value %s (%d)", WUPS_GetStorageStatusStr(storageRes), storageRes);
+        }
+
+        // Try to get value from storage
+        if ((storageRes = WUPS_GetBool(nullptr, TV_REMOTE_CONFIG_STRING, &gTVRemoteDisabled)) == WUPS_STORAGE_ERROR_NOT_FOUND) {
+            // Add the value to the storage if it's missing.
+            if (WUPS_StoreBool(nullptr, TV_REMOTE_CONFIG_STRING, gTVRemoteDisabled) != WUPS_STORAGE_ERROR_SUCCESS) {
                 DEBUG_FUNCTION_LINE_ERR("Failed to store value");
             }
         } else if (storageRes != WUPS_STORAGE_ERROR_SUCCESS) {
@@ -86,6 +97,10 @@ void boolItemCallback(ConfigItemBoolean *item, bool newValue) {
             gEnabled = newValue;
             WUPS_StoreBool(nullptr, item->configId, gEnabled);
         }
+        if (std::string_view(item->configId) == TV_REMOTE_CONFIG_STRING) {
+            gTVRemoteDisabled = newValue;
+            WUPS_StoreBool(nullptr, item->configId, gTVRemoteDisabled);
+        }
     }
 }
 
@@ -115,6 +130,8 @@ WUPS_GET_CONFIG() {
     WUPSConfigItemBoolean_AddToCategoryHandled(config, setting, ENABLED_CONFIG_STRING, "Enabled", gEnabled, &boolItemCallback);
 
     WUPSConfigItemButtonCombo_AddToCategoryHandled(config, setting, BUTTON_COMBO_CONFIG_STRING, "Button combo", gButtonCombo, &buttonComboItemChanged);
+
+    WUPSConfigItemBoolean_AddToCategoryHandled(config, setting, TV_REMOTE_CONFIG_STRING, "Disable TV remote", gTVRemoteDisabled, &boolItemCallback);
 
     return config;
 }

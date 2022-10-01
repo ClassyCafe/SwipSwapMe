@@ -5,7 +5,7 @@ This little plugin can be used to swap the TV and GamePad screen.
 ## Installation
 (`[ENVIRONMENT]` is a placeholder for the actual environment name.)
 
-1. Copy the file `screenshot.wps` into `sd:/wiiu/environments/[ENVIRONMENT]/plugins`.  
+1. Copy the file `swipswapme.wps` into `sd:/wiiu/environments/[ENVIRONMENT]/plugins`.  
 2. Requires the [WiiUPluginLoaderBackend](https://github.com/wiiu-env/WiiUPluginLoaderBackend) in `sd:/wiiu/environments/[ENVIRONMENT]/modules`.
 
 ## Usage
@@ -22,7 +22,7 @@ Via the plugin config menu (press L, DPAD Down and Minus on the GamePad, Pro Con
 
 For building you need: 
 - [wups](https://github.com/wiiu-env/WiiUPluginSystem)
-- [wut](https://github.com/devkitPro/wut
+- [wut](https://github.com/devkitPro/wut)
 
 ## Building using the Dockerfile
 

@@ -116,6 +116,8 @@ void swapVoices() {
 }
 
 DECL_FUNCTION(int32_t, VPADRead, VPADChan chan, VPADStatus *buffer, uint32_t buffer_size, VPADReadError *error) {
+    VPADSetTVMenuInvalid(VPAD_CHAN_0, false);
+
     VPADReadError real_error;
     int32_t result = real_VPADRead(chan, buffer, buffer_size, &real_error);
     if (gEnabled) {
@@ -126,6 +128,9 @@ DECL_FUNCTION(int32_t, VPADRead, VPADChan chan, VPADStatus *buffer, uint32_t buf
         }
         if (swapCoolDown > 0) {
             swapCoolDown--;
+        }
+        if (gTVRemoteDisabled) {
+            VPADSetTVMenuInvalid(VPAD_CHAN_0, gTVRemoteDisabled);
         }
     }
     if (error) {
@@ -172,10 +177,17 @@ DECL_FUNCTION(void, WPADRead, WPADChan chan, WPADStatusProController *data) {
     }
 }
 
+DECL_FUNCTION(void, VPADSetTVMenuInvalid, VPADChan chan, BOOL invalid) {
+    if (gEnabled && gTVRemoteDisabled) {
+        invalid = gTVRemoteDisabled;
+    }
+    real_VPADSetTVMenuInvalid(chan, invalid);
+}
 
 WUPS_MUST_REPLACE(GX2CopyColorBufferToScanBuffer, WUPS_LOADER_LIBRARY_GX2, GX2CopyColorBufferToScanBuffer);
 WUPS_MUST_REPLACE(VPADRead, WUPS_LOADER_LIBRARY_VPAD, VPADRead);
 WUPS_MUST_REPLACE(WPADRead, WUPS_LOADER_LIBRARY_PADSCORE, WPADRead);
+WUPS_MUST_REPLACE(VPADSetTVMenuInvalid, WUPS_LOADER_LIBRARY_VPAD, VPADSetTVMenuInvalid);
 WUPS_MUST_REPLACE(AXAcquireVoiceExOld, WUPS_LOADER_LIBRARY_SND_CORE, AXAcquireVoiceEx);
 WUPS_MUST_REPLACE(AXFreeVoiceOld, WUPS_LOADER_LIBRARY_SND_CORE, AXFreeVoice);
 WUPS_MUST_REPLACE(AXSetVoiceDeviceMixOld, WUPS_LOADER_LIBRARY_SND_CORE, AXSetVoiceDeviceMix);
