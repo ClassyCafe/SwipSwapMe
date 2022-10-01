@@ -17,6 +17,8 @@ Via the plugin config menu (press L, DPAD Down and Minus on the GamePad, Pro Con
     - Enables or disables the SwipSwapMe plugin.
   - Button combo: (Default is the GamePad's TV button)
     - Changes the button combo for swapping the screens.
+  - Disable TV remote: (Default is true)
+    - Hide the TV remote menu when pressing the TV button.
 
 ## Building
 
